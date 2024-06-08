@@ -1,0 +1,2 @@
+import"./assets/modulepreload-polyfill-3cfb730f.js";import{i as t}from"./assets/vendor-77e16229.js";const o=document.querySelector(".form");o.addEventListener("submit",i);function i(r){r.preventDefault();const e=Object.fromEntries(new FormData(o));if(e.state==="fulfilled"){setTimeout(()=>{Promise.resolve(t.show({color:"green",title:"Promise resolved!"}))},Number(e.delay));return}setTimeout(()=>{Promise.reject(t.show({color:"red",title:"Promise rejected!"}))},Number(e.delay))}
+//# sourceMappingURL=commonHelpers2.js.map
