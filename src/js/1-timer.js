@@ -10,54 +10,67 @@ const minutesToCountdown = document.querySelector('[data-minutes]');
 const secondsToCountdown = document.querySelector('[data-seconds]');
 const startBtn = document.querySelector('[data-start]');
 
+let count = null;
+let isActive = false;
+let intervalId = null;
+
 flatpickr('#datetime-picker', {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
+  minDate: new Date(),
   onClose(selectedDates) {
-    let time = selectedDates[0].getTime() - new Date().getTime()
-    let timeToCountdown = convertMs()
+    if(isActive){
+      return
+    }
+    count = selectedDates[0].getTime() - new Date().getTime()
 
-    if (time <= 0) {
+    if (count <= 0) {
       iziToast.show({
-        color:'red',
-        title:'Wrong time'
+        color: 'red',
+        title: 'Wrong time'
       })
       selectedDates[0] = new Date()
       return
     }
-    timeToCountdown = convertMs(time)
-    renderData(timeToCountdown)
+
+    renderData(convertMs(count))
+
     startBtn.disabled = false;
     iziToast.show({
-      color:'green',
-      title:'Success!'
+      color: 'green',
+      title: 'Success!'
     })
-    startBtn.addEventListener('click', onStartBtnClick)
-
-    function onStartBtnClick(e) {
-      startBtn.disabled = true;
-      iziToast.show({
-        color:'green',
-        title:'Countdown started'
-      })
-      let interval = setInterval(() => {
-        if (time <= 1000) {
-          iziToast.show({
-            color:'yellow',
-            title:'Countdown end'
-          })
-          clearInterval(interval);
-          return
-        }
-        time -= 1000;
-        timeToCountdown = convertMs(time);
-        renderData(timeToCountdown)
-      }, 1000)
-    }
   }
 })
+startBtn.addEventListener('click', onStartBtnClick)
+
+function onStartBtnClick(){
+
+  if(isActive){
+    return
+  }
+  iziToast.show({
+    color: 'blue',
+    title:'Start of countdown'
+  })
+  isActive = true;
+  startBtn.disabled = true;
+  intervalId = setInterval(() => {
+    if(count <= 1000){
+      iziToast.show({
+        color: 'yellow',
+        title: 'End of countdown'
+      })
+      clearInterval(intervalId)
+      return
+    }
+
+    count -= 1000;
+    renderData(convertMs(count))
+  }, 1000)
+}
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
