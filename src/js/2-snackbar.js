@@ -10,20 +10,22 @@ function onSubmit(e) {
   e.preventDefault()
   const data = Object.fromEntries(new FormData(form))
 
-  if (data.state === 'fulfilled') {
+   new Promise((resolve, reject) => {
+    if(data.state === 'fulfilled'){
+      resolve(data.delay)
+    }
+    reject(data.delay)
+  }).then(delay => {
     setTimeout(() => {
-      Promise.resolve(iziToast.show({
-        color:'green',
-        title:'Promise resolved!'
-      }))
-    }, Number(data.delay))
-    return
-  }
-
-  setTimeout(() => {
-    Promise.reject(iziToast.show({
-      color:'red',
-      title:'Promise rejected!'
-    }))
-  }, Number(data.delay))
+      iziToast.show({
+        color: 'green',
+        title:`Fulfilled promise in ${delay}ms`
+      })
+    }, Number(delay))
+  }).catch(delay =>  setTimeout(() => {
+    iziToast.show({
+      color: 'red',
+      title:`❌ Rejected promise in ${delay}ms`
+    })
+  }, Number(delay)))
 }

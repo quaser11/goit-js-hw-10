@@ -26,35 +26,32 @@ flatpickr('#datetime-picker', {
     }
     count = selectedDates[0].getTime() - new Date().getTime()
 
-    if (count <= 0) {
-      iziToast.show({
-        color: 'red',
-        title: 'Wrong time'
-      })
-      selectedDates[0] = new Date()
-      return
-    }
-
-    renderData(convertMs(count))
-
     startBtn.disabled = false;
-    iziToast.show({
-      color: 'green',
-      title: 'Success!'
-    })
   }
 })
+
 startBtn.addEventListener('click', onStartBtnClick)
 
 function onStartBtnClick(){
-
   if(isActive){
     return
   }
+
+  if (count <= 0) {
+    iziToast.show({
+      color: 'red',
+      title: 'Wrong time'
+    })
+    return
+  }
+
+  renderData(convertMs(count))
+
   iziToast.show({
     color: 'blue',
     title:'Start of countdown'
   })
+
   isActive = true;
   startBtn.disabled = true;
   intervalId = setInterval(() => {
