@@ -24,7 +24,7 @@ flatpickr('#datetime-picker', {
     if(isActive){
       return
     }
-    count = selectedDates[0].getTime() - new Date().getTime()
+    count = selectedDates[0].getTime();
 
     startBtn.disabled = false;
   }
@@ -45,7 +45,7 @@ function onStartBtnClick(){
     return
   }
 
-  renderData(convertMs(count))
+  renderData(convertMs(count - new Date().getTime()))
 
   iziToast.show({
     color: 'blue',
@@ -63,9 +63,7 @@ function onStartBtnClick(){
       clearInterval(intervalId)
       return
     }
-
-    count -= 1000;
-    renderData(convertMs(count))
+    renderData(convertMs(count - new Date().getTime()))
   }, 1000)
 }
 
